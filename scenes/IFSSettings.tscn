@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c61dat3glfhgc"]
+[gd_scene load_steps=4 format=3 uid="uid://c61dat3glfhgc"]
 
+[ext_resource type="Script" path="res://scenes/IFSSettings.gd" id="1_1ucaj"]
 [ext_resource type="Texture2D" uid="uid://dcs7kjpveqfpb" path="res://assets/panels-1.png" id="1_i57yb"]
 [ext_resource type="PackedScene" uid="uid://yp72ekk8try7" path="res://scenes/ContractionSettings.tscn" id="2_hq0ss"]
 
@@ -8,6 +9,7 @@ theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
+script = ExtResource("1_1ucaj")
 
 [node name="Content" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -30,7 +32,7 @@ theme_override_constants/margin_top = 48
 [node name="Lines" type="VBoxContainer" parent="Content/Content"]
 layout_mode = 2
 
-[node name="AmountLabel" type="Label" parent="Content/Content/Lines"]
+[node name="ContractionAmountLabel" type="Label" parent="Content/Content/Lines"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "amount of contractions
@@ -38,6 +40,8 @@ text = "amount of contractions
 
 [node name="HBoxContainer" type="GridContainer" parent="Content/Content/Lines"]
 layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
 columns = 2
 
 [node name="MinLabel" type="Label" parent="Content/Content/Lines/HBoxContainer"]
@@ -45,7 +49,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "min"
 
-[node name="AmountEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
+[node name="MinEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
@@ -56,7 +60,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "max"
 
-[node name="AmountEdit2" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
+[node name="MaxEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
@@ -67,11 +71,25 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "delay"
 
-[node name="DelayLabel2" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
+[node name="DelayEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
 value = 20.0
+
+[node name="CenteredLabel" type="Label" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "probability of
+the image to
+be centered"
+
+[node name="CenteredEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 0.5
 
 [node name="ContractionSettings" parent="Content/Content/Lines" instance=ExtResource("2_hq0ss")]
 layout_mode = 2
@@ -101,3 +119,8 @@ size_flags_vertical = 0
 [node name="Label" type="Label" parent="Heading/MarginContainer"]
 layout_mode = 2
 text = "ifs settings"
+
+[connection signal="value_changed" from="Content/Content/Lines/HBoxContainer/MinEdit" to="." method="_on_min_edit_value_changed"]
+[connection signal="value_changed" from="Content/Content/Lines/HBoxContainer/MaxEdit" to="." method="_on_max_edit_value_changed"]
+[connection signal="value_changed" from="Content/Content/Lines/HBoxContainer/DelayEdit" to="." method="_on_delay_edit_value_changed"]
+[connection signal="value_changed" from="Content/Content/Lines/HBoxContainer/CenteredEdit" to="." method="_on_centered_edit_value_changed"]

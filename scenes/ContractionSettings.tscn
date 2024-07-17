@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://yp72ekk8try7"]
+[gd_scene load_steps=3 format=3 uid="uid://yp72ekk8try7"]
 
+[ext_resource type="Script" path="res://scenes/ContractionSettings.gd" id="1_0fnn2"]
 [ext_resource type="Texture2D" uid="uid://dcs7kjpveqfpb" path="res://assets/panels-1.png" id="1_7p0ab"]
 
 [node name="ContractionSettings" type="MarginContainer"]
@@ -7,6 +8,7 @@ theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
+script = ExtResource("1_0fnn2")
 
 [node name="Main" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -105,7 +107,7 @@ button_pressed = true
 text = "allow rotation"
 expand_icon = true
 
-[node name="RotationEdit2" type="CheckBox" parent="Main/Content/Lines"]
+[node name="GreyscaleEdit" type="CheckBox" parent="Main/Content/Lines"]
 layout_mode = 2
 size_flags_horizontal = 0
 button_pressed = true
@@ -137,3 +139,11 @@ size_flags_vertical = 0
 [node name="Label" type="Label" parent="Heading/MarginContainer"]
 layout_mode = 2
 text = "contraction settings"
+
+[connection signal="value_changed" from="Main/Content/Lines/Contraction/TranslationMinEdit" to="." method="_on_translation_min_edit_value_changed"]
+[connection signal="value_changed" from="Main/Content/Lines/Contraction/TranslationMaxEdit" to="." method="_on_translation_max_edit_value_changed"]
+[connection signal="value_changed" from="Main/Content/Lines/Contraction/ContrMinEdit" to="." method="_on_contr_min_edit_value_changed"]
+[connection signal="value_changed" from="Main/Content/Lines/Contraction/ContrMaxEdit" to="." method="_on_contr_max_edit_value_changed"]
+[connection signal="pressed" from="Main/Content/Lines/MirrorEdit" to="." method="_on_mirror_edit_pressed"]
+[connection signal="pressed" from="Main/Content/Lines/RotationEdit" to="." method="_on_rotation_edit_pressed"]
+[connection signal="pressed" from="Main/Content/Lines/GreyscaleEdit" to="." method="_on_greyscale_edit_pressed"]

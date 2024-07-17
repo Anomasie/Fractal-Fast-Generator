@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://ce7v4tdjegrv0"]
+[gd_scene load_steps=2 format=3 uid="uid://ce7v4tdjegrv0"]
+
+[ext_resource type="Script" path="res://scenes/SampleSettings.gd" id="1_7dlhf"]
 
 [node name="SampleSettings" type="GridContainer"]
 size_flags_horizontal = 4
@@ -6,6 +8,7 @@ size_flags_vertical = 4
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 columns = 2
+script = ExtResource("1_7dlhf")
 
 [node name="SeedLabel" type="Label" parent="."]
 layout_mode = 2
@@ -34,3 +37,7 @@ layout_mode = 2
 max_value = 1024.0
 value = 64.0
 suffix = "px"
+
+[connection signal="value_changed" from="SeedEdit" to="." method="_on_seed_edit_value_changed"]
+[connection signal="value_changed" from="AmountEdit" to="." method="_on_amount_edit_value_changed"]
+[connection signal="value_changed" from="SizeEdit" to="." method="_on_size_edit_value_changed"]
