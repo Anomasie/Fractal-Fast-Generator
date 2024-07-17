@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://0chdkn8uh8av"]
+[gd_scene load_steps=3 format=3 uid="uid://0chdkn8uh8av"]
 
 [ext_resource type="PackedScene" uid="uid://byi2g6knir2p8" path="res://scenes/Main.tscn" id="1_632c2"]
+[ext_resource type="Script" path="res://scenes/Root.gd" id="1_x3k5t"]
 
 [node name="Screen" type="MarginContainer"]
 anchors_preset = 15
@@ -12,6 +13,7 @@ theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
+script = ExtResource("1_x3k5t")
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 2

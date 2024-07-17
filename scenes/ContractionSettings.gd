@@ -5,10 +5,10 @@ extends MarginContainer
 @onready var GreyscaleEdit = $Main/Content/Lines/GreyscaleEdit
 
 func _ready():
-	Global.translation_min = $Main/Content/Lines/Contraction/TranslationMinEdit
-	Global.translation_max = $Main/Content/Lines/Contraction/TranslationMaxEdit
-	Global.contr_min = $Main/Content/Lines/Contraction/ContrMinEdit
-	Global.contr_max = $Main/Content/Lines/Contraction/ContrMaxEdit
+	Global.translation_min = $Main/Content/Lines/Contraction/TranslationMinEdit.value
+	Global.translation_max = $Main/Content/Lines/Contraction/TranslationMaxEdit.value
+	Global.contr_min = $Main/Content/Lines/Contraction/ContrMinEdit.value
+	Global.contr_max = $Main/Content/Lines/Contraction/ContrMaxEdit.value
 	Global.mirroring_allowed = MirrorEdit.button_pressed
 	Global.rotation_allowed = RotationEdit.button_pressed
 	Global.greyscale_allowed = GreyscaleEdit.button_pressed

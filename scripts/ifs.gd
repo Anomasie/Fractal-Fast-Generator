@@ -3,8 +3,21 @@ class_name IFS
 const ACCURACY = 0.0000001
 
 var systems = [] # array of contractions
-var background_color = Color.WHITE
+var background_color = 0.0
 var delay = Global.DEFAULT_DELAY
+
+static func random_ifs():
+	var ifs = IFS.new()
+	var nb_systems = Random.randi(Global.nb_contractions_min, Global.nb_contractions_max)
+	if nb_systems > 1:
+		ifs.delay = Random.randi(Global.delay_min, Global.delay_max)
+	else:
+		ifs.delay = 0
+	if Global.bgcolor_allowed:
+		ifs.background_color = randf()
+	for _i in nb_systems:
+		ifs.systems.append(Contraction.random_contraction())
+	return ifs
 
 func apply_contraction(pos):
 	if len(systems) > 0:
@@ -62,23 +75,6 @@ func calculate_fractal(start=point.new(), points=2000):
 				1,
 				distribution
 			) )
-	return result
-
-# where will the corners of the unit square be after steps_left steps?
-func calculate_fractal_corners( corners = [Vector2(0,0), Vector2(1,0), Vector2(0,1), Vector2(1,1)], steps_left = 4 ):
-	var result = []
-	if steps_left > 0:
-		for system in systems:
-			for p in corners:
-				p = system.apply(p)
-			result += calculate_fractal_corners(
-				corners,
-				steps_left - 1
-			)
-	else:
-		for system in systems:
-			for p in corners:
-				result.append(system.apply(p))
 	return result
 
 func get_distribution():

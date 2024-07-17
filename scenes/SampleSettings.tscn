@@ -25,7 +25,7 @@ text = "samples"
 
 [node name="AmountEdit" type="SpinBox" parent="."]
 layout_mode = 2
-value = 1.0
+value = 10.0
 
 [node name="SizeLabel" type="Label" parent="."]
 layout_mode = 2
@@ -38,6 +38,17 @@ max_value = 1024.0
 value = 64.0
 suffix = "px"
 
+[node name="PointsLabel" type="Label" parent="."]
+layout_mode = 2
+text = "points"
+
+[node name="PointsEdit" type="SpinBox" parent="."]
+layout_mode = 2
+max_value = 1e+08
+value = 10000.0
+allow_greater = true
+
 [connection signal="value_changed" from="SeedEdit" to="." method="_on_seed_edit_value_changed"]
 [connection signal="value_changed" from="AmountEdit" to="." method="_on_amount_edit_value_changed"]
 [connection signal="value_changed" from="SizeEdit" to="." method="_on_size_edit_value_changed"]
+[connection signal="value_changed" from="PointsEdit" to="." method="_on_points_edit_value_changed"]

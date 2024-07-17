@@ -32,33 +32,37 @@ theme_override_constants/margin_top = 48
 [node name="Lines" type="VBoxContainer" parent="Content/Content"]
 layout_mode = 2
 
-[node name="ContractionAmountLabel" type="Label" parent="Content/Content/Lines"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "amount of contractions
-"
-
 [node name="HBoxContainer" type="GridContainer" parent="Content/Content/Lines"]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
-columns = 2
+columns = 3
 
-[node name="MinLabel" type="Label" parent="Content/Content/Lines/HBoxContainer"]
+[node name="Label1" type="Label" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "property"
+
+[node name="Label2" type="Label" parent="Content/Content/Lines/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "min"
+
+[node name="Label3" type="Label" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "max"
+
+[node name="NbContractionsLabel" type="Label" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "contractions"
 
 [node name="MinEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
 value = 1.0
-
-[node name="MaxLabel" type="Label" parent="Content/Content/Lines/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "max"
 
 [node name="MaxEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
 layout_mode = 2
@@ -71,25 +75,33 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "delay"
 
-[node name="DelayEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
+[node name="DelayMinEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DelayMaxEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
-value = 20.0
+value = 100.0
 
-[node name="CenteredLabel" type="Label" parent="Content/Content/Lines/HBoxContainer"]
+[node name="CenteredLabel" type="Label" parent="Content/Content/Lines"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "probability of
-the image to
-be centered"
+text = "probability of the image to
+be centered:"
 
-[node name="CenteredEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
+[node name="CenteredEdit" type="SpinBox" parent="Content/Content/Lines"]
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
-value = 0.5
+value = 0.88
+
+[node name="BGColorChecker" type="CheckBox" parent="Content/Content/Lines"]
+layout_mode = 2
+button_pressed = true
+text = "allow random background color"
 
 [node name="ContractionSettings" parent="Content/Content/Lines" instance=ExtResource("2_hq0ss")]
 layout_mode = 2
@@ -122,5 +134,7 @@ text = "ifs settings"
 
 [connection signal="value_changed" from="Content/Content/Lines/HBoxContainer/MinEdit" to="." method="_on_min_edit_value_changed"]
 [connection signal="value_changed" from="Content/Content/Lines/HBoxContainer/MaxEdit" to="." method="_on_max_edit_value_changed"]
-[connection signal="value_changed" from="Content/Content/Lines/HBoxContainer/DelayEdit" to="." method="_on_delay_edit_value_changed"]
-[connection signal="value_changed" from="Content/Content/Lines/HBoxContainer/CenteredEdit" to="." method="_on_centered_edit_value_changed"]
+[connection signal="value_changed" from="Content/Content/Lines/HBoxContainer/DelayMinEdit" to="." method="_on_delay_min_edit_value_changed"]
+[connection signal="value_changed" from="Content/Content/Lines/HBoxContainer/DelayMaxEdit" to="." method="_on_delay_max_edit_value_changed"]
+[connection signal="value_changed" from="Content/Content/Lines/CenteredEdit" to="." method="_on_centered_edit_value_changed"]
+[connection signal="pressed" from="Content/Content/Lines/BGColorChecker" to="." method="_on_bg_color_checker_pressed"]

@@ -4,7 +4,25 @@ var translation = Vector2.ZERO
 var contract = Vector2(0.5,0.5)
 var rotation = 0
 var mirrored = false
-var color = Color.BLACK
+var color = 1.0
+
+static func random_contraction():
+	var contraction = Contraction.new()
+	contraction.translation = Vector2(
+		Random.randf(Global.translation_min, Global.translation_max),
+		Random.randf(Global.translation_min, Global.translation_max)
+	)
+	contraction.contract = Vector2(
+		Random.randf(Global.contr_min, Global.contr_max),
+		Random.randf(Global.contr_min, Global.contr_max),
+	)
+	if Global.rotation_allowed:
+		contraction.rotation = Random.randf(0, 2*PI)
+	if Global.greyscale_allowed:
+		contraction.color = randf()
+	if Global.mirroring_allowed:
+		contraction.mirrored = bool(randf() >= 0.5)
+	return contraction
 
 func apply(p):
 	if mirrored:
@@ -15,10 +33,7 @@ func apply(p):
 	return p
 
 func mix(c):
-	c.r = linear(c.r, color.r)
-	c.g = linear(c.g, color.g)
-	c.b = linear(c.b, color.b)
-	return c
+	return (c+color)/2
 
 func linear(a, b, lambda=0.5):
 	return lambda * a + (1 - lambda) * b

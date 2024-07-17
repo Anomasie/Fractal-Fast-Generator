@@ -108,7 +108,7 @@ text = "export as csv"
 [node name="FileDialog" type="FileDialog" parent="."]
 initial_position = 1
 size = Vector2i(960, 500)
-visible = true
+dialog_autowrap = true
 access = 2
 
 [connection signal="pressed" from="Export/Buttons/Button" to="." method="_on_button_pressed"]
