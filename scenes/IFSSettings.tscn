@@ -1,0 +1,103 @@
+[gd_scene load_steps=3 format=3 uid="uid://c61dat3glfhgc"]
+
+[ext_resource type="Texture2D" uid="uid://dcs7kjpveqfpb" path="res://assets/panels-1.png" id="1_i57yb"]
+[ext_resource type="PackedScene" uid="uid://yp72ekk8try7" path="res://scenes/ContractionSettings.tscn" id="2_hq0ss"]
+
+[node name="IFSSettings" type="MarginContainer"]
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Content"]
+layout_mode = 2
+texture = ExtResource("1_i57yb")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="Content" type="MarginContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/margin_top = 48
+
+[node name="Lines" type="VBoxContainer" parent="Content/Content"]
+layout_mode = 2
+
+[node name="AmountLabel" type="Label" parent="Content/Content/Lines"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "amount of contractions
+"
+
+[node name="HBoxContainer" type="GridContainer" parent="Content/Content/Lines"]
+layout_mode = 2
+columns = 2
+
+[node name="MinLabel" type="Label" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "min"
+
+[node name="AmountEdit" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+value = 1.0
+
+[node name="MaxLabel" type="Label" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "max"
+
+[node name="AmountEdit2" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+value = 5.0
+
+[node name="DelayLabel" type="Label" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "delay"
+
+[node name="DelayLabel2" type="SpinBox" parent="Content/Content/Lines/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+value = 20.0
+
+[node name="ContractionSettings" parent="Content/Content/Lines" instance=ExtResource("2_hq0ss")]
+layout_mode = 2
+
+[node name="Heading" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Heading"]
+layout_mode = 2
+texture = ExtResource("1_i57yb")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="Heading"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="Heading/MarginContainer"]
+layout_mode = 2
+text = "ifs settings"

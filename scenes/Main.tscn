@@ -1,0 +1,104 @@
+[gd_scene load_steps=4 format=3 uid="uid://byi2g6knir2p8"]
+
+[ext_resource type="Texture2D" uid="uid://dcs7kjpveqfpb" path="res://assets/panels-1.png" id="1_crth2"]
+[ext_resource type="PackedScene" uid="uid://c61dat3glfhgc" path="res://scenes/IFSSettings.tscn" id="2_q6mpu"]
+[ext_resource type="PackedScene" uid="uid://ce7v4tdjegrv0" path="res://scenes/SampleSettings.tscn" id="2_yelbg"]
+
+[node name="Main" type="VBoxContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="SettingContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="Options" type="MarginContainer" parent="SettingContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_bottom = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="SettingContainer/Options"]
+layout_mode = 2
+texture = ExtResource("1_crth2")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="Content" type="MarginContainer" parent="SettingContainer/Options"]
+layout_mode = 2
+theme_override_constants/margin_top = 32
+
+[node name="Lines" type="VBoxContainer" parent="SettingContainer/Options/Content"]
+layout_mode = 2
+
+[node name="Seperator" type="HBoxContainer" parent="SettingContainer/Options/Content/Lines"]
+layout_mode = 2
+
+[node name="SampleSettings" parent="SettingContainer/Options/Content/Lines/Seperator" instance=ExtResource("2_yelbg")]
+layout_mode = 2
+size_flags_horizontal = 1
+
+[node name="IFSSettings" parent="SettingContainer/Options/Content/Lines/Seperator" instance=ExtResource("2_q6mpu")]
+layout_mode = 2
+
+[node name="Heading" type="MarginContainer" parent="SettingContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="SettingContainer/Heading"]
+layout_mode = 2
+texture = ExtResource("1_crth2")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingContainer/Heading"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="SettingContainer/Heading/MarginContainer"]
+layout_mode = 2
+text = "settings"
+
+[node name="Export" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Export"]
+layout_mode = 2
+texture = ExtResource("1_crth2")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="Buttons" type="MarginContainer" parent="Export"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Export/Buttons"]
+layout_mode = 2
+text = "export as csv"

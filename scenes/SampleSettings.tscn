@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://ce7v4tdjegrv0"]
+
+[node name="SampleSettings" type="GridContainer"]
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="SeedLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_vertical = 0
+text = "seed"
+
+[node name="SeedEdit" type="SpinBox" parent="."]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="AmountLabel" type="Label" parent="."]
+layout_mode = 2
+text = "samples"
+
+[node name="AmountEdit" type="SpinBox" parent="."]
+layout_mode = 2
+value = 1.0
+
+[node name="SizeLabel" type="Label" parent="."]
+layout_mode = 2
+text = "size"
+
+[node name="SizeEdit" type="SpinBox" parent="."]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+max_value = 1024.0
+value = 64.0
+suffix = "px"

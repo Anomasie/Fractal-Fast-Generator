@@ -1,0 +1,139 @@
+[gd_scene load_steps=2 format=3 uid="uid://yp72ekk8try7"]
+
+[ext_resource type="Texture2D" uid="uid://dcs7kjpveqfpb" path="res://assets/panels-1.png" id="1_7p0ab"]
+
+[node name="ContractionSettings" type="MarginContainer"]
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="Main" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Main"]
+layout_mode = 2
+texture = ExtResource("1_7p0ab")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="Content" type="MarginContainer" parent="Main"]
+layout_mode = 2
+theme_override_constants/margin_top = 48
+
+[node name="Lines" type="VBoxContainer" parent="Main/Content"]
+layout_mode = 2
+
+[node name="Contraction" type="GridContainer" parent="Main/Content/Lines"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="Label1" type="Label" parent="Main/Content/Lines/Contraction"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "property"
+
+[node name="Label2" type="Label" parent="Main/Content/Lines/Contraction"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "min"
+
+[node name="Label3" type="Label" parent="Main/Content/Lines/Contraction"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "max"
+
+[node name="TranslationLabel" type="Label" parent="Main/Content/Lines/Contraction"]
+layout_mode = 2
+text = "translation"
+
+[node name="TranslationMinEdit" type="SpinBox" parent="Main/Content/Lines/Contraction"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -100.0
+step = 0.001
+value = -1.0
+allow_greater = true
+allow_lesser = true
+
+[node name="TranslationMaxEdit" type="SpinBox" parent="Main/Content/Lines/Contraction"]
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.001
+value = 1.9
+allow_greater = true
+allow_lesser = true
+
+[node name="ContrLabel" type="Label" parent="Main/Content/Lines/Contraction"]
+layout_mode = 2
+text = "contraction"
+
+[node name="ContrMinEdit" type="SpinBox" parent="Main/Content/Lines/Contraction"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.001
+allow_greater = true
+allow_lesser = true
+
+[node name="ContrMaxEdit" type="SpinBox" parent="Main/Content/Lines/Contraction"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.001
+value = 1.0
+allow_greater = true
+allow_lesser = true
+
+[node name="MirrorEdit" type="CheckBox" parent="Main/Content/Lines"]
+layout_mode = 2
+size_flags_horizontal = 0
+button_pressed = true
+text = "allow mirroring"
+
+[node name="RotationEdit" type="CheckBox" parent="Main/Content/Lines"]
+layout_mode = 2
+size_flags_horizontal = 0
+button_pressed = true
+text = "allow rotation"
+expand_icon = true
+
+[node name="RotationEdit2" type="CheckBox" parent="Main/Content/Lines"]
+layout_mode = 2
+size_flags_horizontal = 0
+button_pressed = true
+text = "allow greyscale"
+expand_icon = true
+
+[node name="Heading" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Heading"]
+layout_mode = 2
+texture = ExtResource("1_7p0ab")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="Heading"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="Heading/MarginContainer"]
+layout_mode = 2
+text = "contraction settings"
