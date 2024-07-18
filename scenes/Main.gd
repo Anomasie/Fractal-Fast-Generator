@@ -4,15 +4,32 @@ var data = ""
 var meta_data = ""
 var file_counter = 0
 
+var calculating = false
+var sample_counter = 1
+
+@onready var Progress = $Progress/ProgressBar
+
 func _ready():
 	$FileDialog.hide()
 
-func empty_image(color=0.0, size=Global.image_size):
+func _process(_delta):
+	if calculating and sample_counter < Global.sample_size:
+		var ifs = IFS.random_ifs()
+		data += image_to_string(generate_image(ifs)) + "\n"
+		meta_data += meta_data_to_string(ifs) + "\n"
+		sample_counter += 1
+		Progress.value = float(sample_counter) / Global.sample_size * 100
+	elif calculating:
+		calculating = false
+		Progress.value = 0
+		save()
+
+func empty_image(color=0.0, image_size=Global.image_size):
 	var matrix = []
-	matrix.resize(size)
+	matrix.resize(image_size)
 	for row in len(matrix):
 		var array = []
-		array.resize(size)
+		array.resize(image_size)
 		array.fill(color)
 		matrix[row] = array
 	return matrix
@@ -69,18 +86,15 @@ func points_to_image_original(ifs, points):
 				# draw
 				image[real_position.x][real_position.y] = entry.color
 	# the less points are drawn, the more likely is it to draw 
-	if Global.prefer_nonempty_pictures and counter < Global.points/2 and randf()*2 > float(counter) / Global.points:
+	if Global.prefer_nonempty_pictures and counter < float(Global.points)/2 and randf()*2 > float(counter) / Global.points:
 		return points_to_image_centered(ifs, points)
 	else:
 		return image
 
 func points_to_image(ifs, points):
-	var image = empty_image(ifs.background_color)
 	if randf() <= Global.p_centered:
-		print("centered")
 		return points_to_image_centered(ifs, points)
 	else:
-		print("not centered")
 		return points_to_image_original(ifs, points)
 
 func generate_image(ifs):
@@ -105,7 +119,10 @@ func image_to_string(image):
 	return ",".join(strings)
 
 func meta_data_to_string(ifs):
-	var string = str(ifs.background_color)
+	# version
+	var string = "v1"
+	# background color
+	string += "," + str(ifs.background_color)
 	# delay
 	string += "," + str(ifs.delay)
 	# ifs data
@@ -123,12 +140,8 @@ func _on_button_pressed():
 	seed(Global.random_seed)
 	data = ""
 	meta_data = ""
-	for _i in Global.sample_size:
-		print(_i, ")")
-		var ifs = IFS.random_ifs()
-		data += image_to_string(generate_image(ifs)) + "\n"
-		meta_data += meta_data_to_string(ifs) + "\n"
-	save()
+	sample_counter = 1
+	calculating = true
 
 # saving
 

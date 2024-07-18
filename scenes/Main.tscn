@@ -110,5 +110,11 @@ size = Vector2i(960, 500)
 dialog_autowrap = true
 access = 2
 
+[node name="Progress" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Progress"]
+layout_mode = 2
+
 [connection signal="pressed" from="Export/Buttons/Button" to="." method="_on_button_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
