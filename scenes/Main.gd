@@ -7,19 +7,25 @@ var file_counter = 0
 var calculating = false
 var sample_counter = 1
 
-@onready var Progress = $Progress/ProgressBar
+@onready var Progress = $Progress/MarginContainer/VBoxContainer/ProgressBar
+@onready var StopButton = $Progress/MarginContainer/VBoxContainer/StopButton
+@onready var StartButton = $Progress/MarginContainer/VBoxContainer/StartButton
 
 func _ready():
 	$FileDialog.hide()
+	StopButton.hide()
+	StartButton.hide()
 
 func _process(_delta):
-	if calculating and sample_counter < Global.sample_size:
+	if calculating and sample_counter <= Global.sample_size:
 		var ifs = IFS.random_ifs()
 		data += image_to_string(generate_image(ifs)) + "\n"
 		meta_data += meta_data_to_string(ifs) + "\n"
 		sample_counter += 1
 		Progress.value = float(sample_counter) / Global.sample_size * 100
 	elif calculating:
+		StopButton.hide()
+		StartButton.hide()
 		calculating = false
 		Progress.value = 0
 		save()
@@ -142,6 +148,8 @@ func _on_button_pressed():
 	meta_data = ""
 	sample_counter = 1
 	calculating = true
+	StopButton.show()
+	StartButton.hide()
 
 # saving
 
@@ -165,3 +173,13 @@ func save_local(path):
 
 func _on_file_dialog_file_selected(path):
 	save_local(path)
+
+func _on_stop_button_pressed():
+	calculating = false
+	StopButton.hide()
+	StartButton.show()
+
+func _on_start_button_pressed():
+	calculating = true
+	StopButton.show()
+	StartButton.hide()

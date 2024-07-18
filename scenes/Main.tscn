@@ -113,8 +113,32 @@ access = 2
 [node name="Progress" type="MarginContainer" parent="."]
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="Progress"]
+[node name="NinePatchRect" type="NinePatchRect" parent="Progress"]
 layout_mode = 2
+texture = ExtResource("1_crth2")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="Progress"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Progress/MarginContainer"]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Progress/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="StopButton" type="Button" parent="Progress/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "stop calculating"
+
+[node name="StartButton" type="Button" parent="Progress/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "continue"
 
 [connection signal="pressed" from="Export/Buttons/Button" to="." method="_on_button_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="Progress/MarginContainer/VBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
+[connection signal="pressed" from="Progress/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
