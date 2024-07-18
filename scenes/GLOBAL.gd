@@ -22,6 +22,9 @@ var p_centered = 0.0
 var nb_contractions_min = 0
 var nb_contractions_max = 0
 var delay = DEFAULT_DELAY
+var frame_limit_on = true
+var frame_limit_min = 0
+var frame_limit_max = 0
 ## contractions
 var translation_min = 0.0
 var translation_max = 0.0

@@ -1,6 +1,7 @@
 extends VBoxContainer
 
 var data = ""
+var meta_data = ""
 var file_counter = 0
 
 func _ready():
@@ -82,23 +83,51 @@ func points_to_image(ifs, points):
 		print("not centered")
 		return points_to_image_original(ifs, points)
 
+func generate_image(ifs):
+	var results = []
+	# check if frame_limit is on
+	## if so: get a frame_limit and only calculate that many points at once
+	if Global.frame_limit_on:
+		var frame_limit = Random.randi(Global.frame_limit_min, Global.frame_limit_max)
+		while len(results) < Global.points:
+			results += ifs.calculate_fractal(point.new(), min(
+				Global.points - len(results),
+				frame_limit))
+	# else: just calculate all of them in one rush
+	else:
+		results = ifs.calculate_fractal(point.new(), Global.points)
+	return points_to_image(ifs, results)
+
 func image_to_string(image):
 	var strings = []
 	for x in len(image):
 		strings.append(",".join(image[x]))
 	return ",".join(strings)
 
-func generate_fractal():
-	var ifs = IFS.random_ifs()
-	var results = ifs.calculate_fractal(point.new(), Global.points)
-	return points_to_image(ifs, results)
+func meta_data_to_string(ifs):
+	var string = str(ifs.background_color)
+	# delay
+	string += "," + str(ifs.delay)
+	# ifs data
+	for contraction in ifs.systems:
+		string += ","
+		string += str(contraction.translation.x) + "," + str(contraction.translation.y) + ","
+		string += str(contraction.contract.x) + "," + str(contraction.contract.y) + ","
+		string += str(contraction.rotation) + ","
+		string += str(int(contraction.mirrored)) + ","
+		string += str(contraction.color)
+	return string
 
 func _on_button_pressed():
 	# set seed
 	seed(Global.random_seed)
+	data = ""
+	meta_data = ""
 	for _i in Global.sample_size:
 		print(_i, ")")
-		data += image_to_string(generate_fractal()) + "\n"
+		var ifs = IFS.random_ifs()
+		data += image_to_string(generate_image(ifs)) + "\n"
+		meta_data += meta_data_to_string(ifs) + "\n"
 	save()
 
 # saving
@@ -110,8 +139,15 @@ func save_local(path):
 	# save image
 	if not path.ends_with(".csv"):
 		path += ".csv"
-	var file = FileAccess.open(path, FileAccess.WRITE)
+	var file = FileAccess.open(
+		path,
+		FileAccess.WRITE)
 	file.store_string(data)
+	file.close()
+	var meta_file = FileAccess.open(
+		path.left(path.length()-4)+"_meta.csv",
+		FileAccess.WRITE)
+	meta_file.store_string(meta_data)
 	file.close()
 
 func _on_file_dialog_file_selected(path):

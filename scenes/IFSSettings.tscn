@@ -72,7 +72,7 @@ value = 1.0
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
-value = 5.0
+value = 10.0
 
 [node name="DelayLabel" type="Label" parent="Content/Content/Lines/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -88,6 +88,22 @@ layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
 value = 100.0
+
+[node name="FrameLimit" type="CheckBox" parent="Content/Content/Lines/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "frame limit"
+
+[node name="FrameLimitMin" type="SpinBox" parent="Content/Content/Lines/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+value = 100.0
+
+[node name="FrameLimitMax" type="SpinBox" parent="Content/Content/Lines/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 1e+06
+value = 1000.0
 
 [node name="CenteredLabel" type="Label" parent="Content/Content/Lines/VBoxContainer"]
 layout_mode = 2
@@ -140,5 +156,8 @@ text = "ifs settings"
 [connection signal="value_changed" from="Content/Content/Lines/VBoxContainer/HBoxContainer/MaxEdit" to="." method="_on_max_edit_value_changed"]
 [connection signal="value_changed" from="Content/Content/Lines/VBoxContainer/HBoxContainer/DelayMinEdit" to="." method="_on_delay_min_edit_value_changed"]
 [connection signal="value_changed" from="Content/Content/Lines/VBoxContainer/HBoxContainer/DelayMaxEdit" to="." method="_on_delay_max_edit_value_changed"]
+[connection signal="pressed" from="Content/Content/Lines/VBoxContainer/HBoxContainer/FrameLimit" to="." method="_on_frame_limit_pressed"]
+[connection signal="value_changed" from="Content/Content/Lines/VBoxContainer/HBoxContainer/FrameLimitMin" to="." method="_on_frame_limit_min_value_changed"]
+[connection signal="value_changed" from="Content/Content/Lines/VBoxContainer/HBoxContainer/FrameLimitMax" to="." method="_on_frame_limit_max_value_changed"]
 [connection signal="value_changed" from="Content/Content/Lines/VBoxContainer/CenteredEdit" to="." method="_on_centered_edit_value_changed"]
 [connection signal="pressed" from="Content/Content/Lines/VBoxContainer/BGColorChecker" to="." method="_on_bg_color_checker_pressed"]

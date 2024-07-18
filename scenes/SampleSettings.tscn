@@ -66,8 +66,8 @@ layout_mode = 2
 button_pressed = true
 text = "prefer nonempty pictures"
 
-[connection signal="value_changed" from="Boxes/SeedEdit" to="Boxes" method="_on_seed_edit_value_changed"]
-[connection signal="value_changed" from="Boxes/AmountEdit" to="Boxes" method="_on_amount_edit_value_changed"]
-[connection signal="value_changed" from="Boxes/SizeEdit" to="Boxes" method="_on_size_edit_value_changed"]
-[connection signal="value_changed" from="Boxes/PointsEdit" to="Boxes" method="_on_points_edit_value_changed"]
+[connection signal="value_changed" from="Boxes/SeedEdit" to="." method="_on_seed_edit_value_changed"]
+[connection signal="value_changed" from="Boxes/AmountEdit" to="." method="_on_amount_edit_value_changed"]
+[connection signal="value_changed" from="Boxes/SizeEdit" to="." method="_on_size_edit_value_changed"]
+[connection signal="value_changed" from="Boxes/PointsEdit" to="." method="_on_points_edit_value_changed"]
 [connection signal="pressed" from="NonemptyPicturesChecker" to="." method="_on_nonempty_pictures_checker_pressed"]
