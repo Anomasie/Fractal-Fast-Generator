@@ -54,7 +54,6 @@ layout_mode = 2
 
 [node name="SampleSettings" parent="SettingContainer/Options/Content/Lines/Seperator" instance=ExtResource("2_yelbg")]
 layout_mode = 2
-size_flags_horizontal = 1
 
 [node name="IFSSettings" parent="SettingContainer/Options/Content/Lines/Seperator" instance=ExtResource("2_q6mpu")]
 layout_mode = 2

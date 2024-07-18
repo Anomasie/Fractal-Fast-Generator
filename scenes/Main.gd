@@ -16,54 +16,71 @@ func empty_image(color=0.0, size=Global.image_size):
 		matrix[row] = array
 	return matrix
 
+func points_to_image_centered(ifs, points):
+	var image = empty_image(ifs.background_color)
+	# center image
+	## get origins
+	var rect = Rect2(Vector2i(0,0), Vector2i(0,0))
+	if len(points) > 0:
+		rect = Rect2(points[0].position, Vector2i(0,0))
+	for entry in points:
+		rect = rect.expand(entry.position)
+	# set current_origin and current_size
+	## get length
+	var length = max(rect.size.x, rect.size.y)
+	# set origin
+	## shift origin such that boundaries are left and right
+	## shift origin such that fractal is centered
+	var current_origin = rect.position - Vector2(1,1) * length / 10 / 2 - Vector2(
+		length - rect.size.x,
+		length - rect.size.y
+	) / 2
+	var current_size = length * 1.1
+	
+	# draw
+	for entry in points:
+		@warning_ignore("narrowing_conversion")
+		var real_position = Vector2i(
+			# doesn't work anymore :(
+			#remap(entry.position.x, current_origin.x, current_size, 0, image_size.x),
+			#remap(entry.position.y, current_origin.y, current_size, 0, image_size.y)
+			(entry.position.x - current_origin.x) / current_size * len(image),
+			(entry.position.y - current_origin.y) / current_size * len(image)
+		)
+		if real_position.x >= 0 and real_position.x < len(image):
+			if real_position.y >= 0 and real_position.y < len(image):
+				image[real_position.x][real_position.y] = entry.color
+	return image
+
+func points_to_image_original(ifs, points):
+	var image = empty_image(ifs.background_color)
+	var counter = 0
+	for entry in points:
+		var real_position = Vector2i(
+			entry.position.x * len(image),
+			entry.position.y * len(image)
+		)
+		if real_position.x >= 0 and real_position.x < len(image):
+			if real_position.y >= 0 and real_position.y < len(image):
+				# new point drawn?
+				if image[real_position.x][real_position.y] != ifs.background_color:
+					counter += 1
+				# draw
+				image[real_position.x][real_position.y] = entry.color
+	# the less points are drawn, the more likely is it to draw 
+	if Global.prefer_nonempty_pictures and counter < Global.points/2 and randf()*2 > float(counter) / Global.points:
+		return points_to_image_centered(ifs, points)
+	else:
+		return image
+
 func points_to_image(ifs, points):
 	var image = empty_image(ifs.background_color)
 	if randf() <= Global.p_centered:
 		print("centered")
-		# center image
-		## get origins
-		var rect = Rect2(Vector2i(0,0), Vector2i(0,0))
-		if len(points) > 0:
-			rect = Rect2(points[0].position, Vector2i(0,0))
-		for entry in points:
-			rect = rect.expand(entry.position)
-		# set current_origin and current_size
-		## get length
-		var length = max(rect.size.x, rect.size.y)
-		# set origin
-		## shift origin such that boundaries are left and right
-		## shift origin such that fractal is centered
-		var current_origin = rect.position - Vector2(1,1) * length / 10 / 2 - Vector2(
-			length - rect.size.x,
-			length - rect.size.y
-		) / 2
-		var current_size = length * 1.1
-		
-		# draw
-		for entry in points:
-			@warning_ignore("narrowing_conversion")
-			var real_position = Vector2i(
-				# doesn't work anymore :(
-				#remap(entry.position.x, current_origin.x, current_size, 0, image_size.x),
-				#remap(entry.position.y, current_origin.y, current_size, 0, image_size.y)
-				(entry.position.x - current_origin.x) / current_size * len(image),
-				(entry.position.y - current_origin.y) / current_size * len(image)
-			)
-			if real_position.x >= 0 and real_position.x < len(image):
-				if real_position.y >= 0 and real_position.y < len(image):
-					image[real_position.x][real_position.y] = entry.color
+		return points_to_image_centered(ifs, points)
 	else:
 		print("not centered")
-		for entry in points:
-			var real_position = Vector2i(
-				entry.position.x * len(image),
-				entry.position.y * len(image)
-			)
-			if real_position.x >= 0 and real_position.x < len(image):
-				if real_position.y >= 0 and real_position.y < len(image):
-					image[real_position.x][real_position.y] = entry.color
-		image[5][len(image)-1] = 0.5
-	return image
+		return points_to_image_original(ifs, points)
 
 func image_to_string(image):
 	var strings = []
@@ -80,9 +97,8 @@ func _on_button_pressed():
 	# set seed
 	seed(Global.random_seed)
 	for _i in Global.sample_size:
-		print(_i)
+		print(_i, ")")
 		data += image_to_string(generate_fractal()) + "\n"
-		print()
 	save()
 
 # saving

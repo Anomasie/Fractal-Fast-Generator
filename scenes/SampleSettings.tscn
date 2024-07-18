@@ -2,53 +2,72 @@
 
 [ext_resource type="Script" path="res://scenes/SampleSettings.gd" id="1_7dlhf"]
 
-[node name="SampleSettings" type="GridContainer"]
-size_flags_horizontal = 4
+[node name="SampleSettings" type="VBoxContainer"]
+offset_right = 292.0
+offset_bottom = 156.0
+size_flags_vertical = 4
+script = ExtResource("1_7dlhf")
+
+[node name="Boxes" type="GridContainer" parent="."]
+layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 columns = 2
-script = ExtResource("1_7dlhf")
 
-[node name="SeedLabel" type="Label" parent="."]
+[node name="SeedLabel" type="Label" parent="Boxes"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "seed"
 
-[node name="SeedEdit" type="SpinBox" parent="."]
+[node name="SeedEdit" type="SpinBox" parent="Boxes"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 0
 
-[node name="AmountLabel" type="Label" parent="."]
+[node name="AmountLabel" type="Label" parent="Boxes"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "samples"
 
-[node name="AmountEdit" type="SpinBox" parent="."]
+[node name="AmountEdit" type="SpinBox" parent="Boxes"]
 layout_mode = 2
+size_flags_horizontal = 3
 value = 10.0
 
-[node name="SizeLabel" type="Label" parent="."]
+[node name="SizeLabel" type="Label" parent="Boxes"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "size"
 
-[node name="SizeEdit" type="SpinBox" parent="."]
+[node name="SizeEdit" type="SpinBox" parent="Boxes"]
 custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 max_value = 1024.0
 value = 64.0
 suffix = "px"
 
-[node name="PointsLabel" type="Label" parent="."]
+[node name="PointsLabel" type="Label" parent="Boxes"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "points"
 
-[node name="PointsEdit" type="SpinBox" parent="."]
+[node name="PointsEdit" type="SpinBox" parent="Boxes"]
 layout_mode = 2
+size_flags_horizontal = 3
 max_value = 1e+08
 value = 10000.0
 allow_greater = true
 
-[connection signal="value_changed" from="SeedEdit" to="." method="_on_seed_edit_value_changed"]
-[connection signal="value_changed" from="AmountEdit" to="." method="_on_amount_edit_value_changed"]
-[connection signal="value_changed" from="SizeEdit" to="." method="_on_size_edit_value_changed"]
-[connection signal="value_changed" from="PointsEdit" to="." method="_on_points_edit_value_changed"]
+[node name="NonemptyPicturesChecker" type="CheckBox" parent="."]
+layout_mode = 2
+button_pressed = true
+text = "prefer nonempty pictures"
+
+[connection signal="value_changed" from="Boxes/SeedEdit" to="Boxes" method="_on_seed_edit_value_changed"]
+[connection signal="value_changed" from="Boxes/AmountEdit" to="Boxes" method="_on_amount_edit_value_changed"]
+[connection signal="value_changed" from="Boxes/SizeEdit" to="Boxes" method="_on_size_edit_value_changed"]
+[connection signal="value_changed" from="Boxes/PointsEdit" to="Boxes" method="_on_points_edit_value_changed"]
+[connection signal="pressed" from="NonemptyPicturesChecker" to="." method="_on_nonempty_pictures_checker_pressed"]

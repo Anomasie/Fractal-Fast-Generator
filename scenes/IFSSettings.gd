@@ -1,11 +1,11 @@
 extends MarginContainer
 
-@onready var NbContractionsMin = $Content/Content/Lines/HBoxContainer/MinEdit
-@onready var NbContractionsMax = $Content/Content/Lines/HBoxContainer/MaxEdit
-@onready var DelayMin = $Content/Content/Lines/HBoxContainer/DelayMinEdit
-@onready var DelayMax = $Content/Content/Lines/HBoxContainer/DelayMaxEdit
-@onready var PCentered = $Content/Content/Lines/CenteredEdit
-@onready var BGColorChecker = $Content/Content/Lines/BGColorChecker
+@onready var NbContractionsMin = $Content/Content/Lines/VBoxContainer/HBoxContainer/MinEdit
+@onready var NbContractionsMax = $Content/Content/Lines/VBoxContainer/HBoxContainer/MaxEdit
+@onready var DelayMin = $Content/Content/Lines/VBoxContainer/HBoxContainer/DelayMinEdit
+@onready var DelayMax = $Content/Content/Lines/VBoxContainer/HBoxContainer/DelayMaxEdit
+@onready var PCentered = $Content/Content/Lines/VBoxContainer/CenteredEdit
+@onready var BGColorChecker = $Content/Content/Lines/VBoxContainer/BGColorChecker
 
 func _ready():
 	Global.nb_contractions_min = NbContractionsMin.value

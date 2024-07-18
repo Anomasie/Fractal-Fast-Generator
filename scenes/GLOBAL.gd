@@ -14,6 +14,7 @@ var random_seed = 0
 var sample_size = 0
 var image_size = 0
 var points = 0
+var prefer_nonempty_pictures = true
 ## ifs
 var delay_min = 0
 var delay_max = 0
