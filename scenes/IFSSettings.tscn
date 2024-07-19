@@ -72,7 +72,7 @@ value = 1.0
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
-value = 10.0
+value = 16.0
 
 [node name="DelayLabel" type="Label" parent="Content/Content/Lines/VBoxContainer/HBoxContainer"]
 layout_mode = 2
