@@ -34,6 +34,7 @@ text = "samples"
 [node name="AmountEdit" type="SpinBox" parent="Boxes"]
 layout_mode = 2
 size_flags_horizontal = 3
+max_value = 1e+08
 value = 10.0
 
 [node name="SizeLabel" type="Label" parent="Boxes"]

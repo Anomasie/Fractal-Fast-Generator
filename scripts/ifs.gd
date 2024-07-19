@@ -130,7 +130,8 @@ static func from_meta_data_version(meta_data, version):
 				var ifs = IFS.new()
 				
 				# background color
-				ifs.background_color = Color.from_string(units[0], Color.WHITE)
+				var background_color = Color.from_string(units[0], Color.WHITE)
+				ifs.background_color = (background_color.r + background_color.g + background_color.b)/3
 				## background color saved? -> delete first entry
 				if Color.html_is_valid(units[0]): 
 					units.remove_at(0)
@@ -153,7 +154,8 @@ static func from_meta_data_version(meta_data, version):
 					contraction.mirrored = (entries[5] in ["1", "true"])
 					if contraction.mirrored: # if mirrored: change anchor to bottom-left point
 						contraction.translation += Vector2(contraction.contract.x, 0).rotated(-contraction.rotation)
-					contraction.color = Color.from_string(entries[6], Color.BLACK) # black is default
+					var color = Color.from_string(entries[6], Color.BLACK)
+					contraction.color = (color.r + color.g + color.b)/3
 					meta_ifs_systems.append(contraction)
 				ifs.systems = meta_ifs_systems
 				
@@ -171,7 +173,8 @@ static func from_meta_data_version(meta_data, version):
 				units.remove_at(0)
 				
 				# background color
-				ifs.background_color = Color.from_string(units[0], Color.WHITE)
+				var background_color = Color.from_string(units[0], Color.WHITE)
+				ifs.background_color = (background_color.r + background_color.g + background_color.b)/3
 				units.remove_at(0)
 				
 				# delay
@@ -189,7 +192,8 @@ static func from_meta_data_version(meta_data, version):
 					contraction.contract = Vector2(float(entries[2]), float(entries[3]))
 					contraction.rotation = float(entries[4])
 					contraction.mirrored = (entries[5] in ["1", "true"])
-					contraction.color = Color.from_string(entries[6], Color.BLACK) # black is default
+					var color = Color.from_string(entries[6], Color.BLACK)
+					contraction.color = (color.r + color.g + color.b)/3
 					meta_ifs_systems.append(contraction)
 				ifs.systems = meta_ifs_systems
 				

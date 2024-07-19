@@ -100,11 +100,31 @@ patch_margin_bottom = 5
 [node name="Buttons" type="MarginContainer" parent="Export"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="Export/Buttons"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Export/Buttons"]
 layout_mode = 2
-text = "export as csv"
+
+[node name="LoadButton" type="Button" parent="Export/Buttons/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "create from file"
+
+[node name="Button" type="Button" parent="Export/Buttons/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "generate new"
+
+[node name="MetaButton" type="Button" parent="Export/Buttons/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "generate only meta data"
 
 [node name="FileDialog" type="FileDialog" parent="."]
+initial_position = 1
+size = Vector2i(960, 500)
+dialog_autowrap = true
+access = 2
+
+[node name="FileDialogForRandomMeta" type="FileDialog" parent="."]
 initial_position = 1
 size = Vector2i(960, 500)
 dialog_autowrap = true
@@ -138,7 +158,19 @@ text = "stop calculating"
 layout_mode = 2
 text = "continue"
 
-[connection signal="pressed" from="Export/Buttons/Button" to="." method="_on_button_pressed"]
+[node name="LoadFileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+initial_position = 1
+size = Vector2i(800, 500)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+
+[connection signal="pressed" from="Export/Buttons/HBoxContainer/LoadButton" to="." method="_on_upload_button_pressed"]
+[connection signal="pressed" from="Export/Buttons/HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Export/Buttons/HBoxContainer/MetaButton" to="." method="_on_meta_button_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="file_selected" from="FileDialogForRandomMeta" to="." method="_on_file_dialog_for_random_meta_file_selected"]
 [connection signal="pressed" from="Progress/MarginContainer/VBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
 [connection signal="pressed" from="Progress/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="file_selected" from="LoadFileDialog" to="." method="_on_load_file_dialog_file_selected"]

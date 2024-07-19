@@ -1,5 +1,7 @@
 extends VBoxContainer
 
+var ifs_list = []
+
 var data = ""
 var meta_data = ""
 var file_counter = 0
@@ -11,24 +13,67 @@ var sample_counter = 1
 @onready var StopButton = $Progress/MarginContainer/VBoxContainer/StopButton
 @onready var StartButton = $Progress/MarginContainer/VBoxContainer/StartButton
 
+@onready var LoadButton = $Export/Buttons/HBoxContainer/LoadButton
+@onready var LoadDialog = $LoadFileDialog
+
+@onready var IFSSettings = $SettingContainer/Options/Content/Lines/Seperator/IFSSettings
+
 func _ready():
 	$FileDialog.hide()
 	StopButton.hide()
 	StartButton.hide()
+	LoadDialog.hide()
 
 func _process(_delta):
-	if calculating and sample_counter <= Global.sample_size:
-		var ifs = IFS.random_ifs()
-		data += image_to_string(generate_image(ifs)) + "\n"
-		meta_data += meta_data_to_string(ifs) + "\n"
-		sample_counter += 1
-		Progress.value = float(sample_counter) / Global.sample_size * 100
-	elif calculating:
-		StopButton.hide()
-		StartButton.hide()
-		calculating = false
-		Progress.value = 0
-		save()
+	if calculating:
+		if ifs_list and sample_counter < len(ifs_list):
+			# add centered image
+			data += image_to_string(generate_image(ifs_list[sample_counter-1], 1)) + "\n"
+			# add not-centered image
+			data += image_to_string(generate_image(ifs_list[sample_counter-1], 0)) + "\n"
+			# add meta-data (in python-format)
+			meta_data += meta_data_to_string(ifs_list[sample_counter-1]) + "\n"
+			meta_data += meta_data_to_string(ifs_list[sample_counter-1]) + "\n"
+			# go on
+			sample_counter += 1
+			Progress.value = float(sample_counter) / len(ifs_list) * 100
+		elif not ifs_list and sample_counter <= Global.sample_size:
+			var ifs = IFS.random_ifs()
+			data += image_to_string(generate_image(ifs)) + "\n"
+			meta_data += meta_data_to_string(ifs) + "\n"
+			sample_counter += 1
+			Progress.value = float(sample_counter) / Global.sample_size * 100
+		else:
+			end_calculating()
+
+func start_calculating():
+	seed(Global.random_seed)
+	data = ""
+	meta_data = ""
+	sample_counter = 1
+	ifs_list = []
+	resume_calculating()
+
+func end_calculating():
+	stop_calculating()
+	save()
+
+func stop_calculating():
+	Global.p_centered = IFSSettings.PCentered.value
+	StopButton.hide()
+	StartButton.hide()
+	calculating = false
+	Progress.value = 0
+
+func pause_calculating():
+	calculating = false
+	StopButton.hide()
+	StartButton.show()
+
+func resume_calculating():
+	calculating = true
+	StopButton.show()
+	StartButton.hide()
 
 func empty_image(color=0.0, image_size=Global.image_size):
 	var matrix = []
@@ -73,7 +118,7 @@ func points_to_image_centered(ifs, points):
 		)
 		if real_position.x >= 0 and real_position.x < len(image):
 			if real_position.y >= 0 and real_position.y < len(image):
-				image[real_position.x][real_position.y] = entry.color
+				image[len(image)-real_position.y-1][real_position.x] = entry.color
 	return image
 
 func points_to_image_original(ifs, points):
@@ -90,9 +135,9 @@ func points_to_image_original(ifs, points):
 				if image[real_position.x][real_position.y] != ifs.background_color:
 					counter += 1
 				# draw
-				image[real_position.x][real_position.y] = entry.color
+				image[len(image)-real_position.y-1][real_position.x] = entry.color
 	# the less points are drawn, the more likely is it to draw 
-	if Global.prefer_nonempty_pictures and counter < float(Global.points)/2 and randf()*2 > float(counter) / Global.points:
+	if not ifs_list and Global.prefer_nonempty_pictures and counter < float(Global.points)/2 and randf()*2 > float(counter) / Global.points:
 		return points_to_image_centered(ifs, points)
 	else:
 		return image
@@ -103,7 +148,7 @@ func points_to_image(ifs, points):
 	else:
 		return points_to_image_original(ifs, points)
 
-func generate_image(ifs):
+func generate_image(ifs, centered=-1):
 	var results = []
 	# check if frame_limit is on
 	## if so: get a frame_limit and only calculate that many points at once
@@ -116,7 +161,10 @@ func generate_image(ifs):
 	# else: just calculate all of them in one rush
 	else:
 		results = ifs.calculate_fractal(point.new(), Global.points)
-	return points_to_image(ifs, results)
+	match sign(centered):
+		-1: return points_to_image(ifs, results)
+		0:  return points_to_image_original(ifs, results)
+		1:  return points_to_image_centered(ifs, results)
 
 func image_to_string(image):
 	var strings = []
@@ -142,14 +190,7 @@ func meta_data_to_string(ifs):
 	return string
 
 func _on_button_pressed():
-	# set seed
-	seed(Global.random_seed)
-	data = ""
-	meta_data = ""
-	sample_counter = 1
-	calculating = true
-	StopButton.show()
-	StartButton.hide()
+	start_calculating()
 
 # saving
 
@@ -157,7 +198,10 @@ func save():
 	$FileDialog.show()
 
 func save_local(path):
-	# save image
+	save_images(path)
+	save_meta_data(path)
+
+func save_images(path):
 	if not path.ends_with(".csv"):
 		path += ".csv"
 	var file = FileAccess.open(
@@ -165,21 +209,62 @@ func save_local(path):
 		FileAccess.WRITE)
 	file.store_string(data)
 	file.close()
-	var meta_file = FileAccess.open(
-		path.left(path.length()-4)+"_meta.csv",
+
+func save_meta_data(path):
+	if path.ends_with(".csv"):
+		path = path.left(path.length()-4)
+	if path.ends_with("_meta"):
+		path = path.left(path.length()-5)
+	var file = FileAccess.open(
+		path+"_meta.csv",
 		FileAccess.WRITE)
-	meta_file.store_string(meta_data)
+	file.store_string(meta_data)
 	file.close()
 
 func _on_file_dialog_file_selected(path):
 	save_local(path)
 
 func _on_stop_button_pressed():
-	calculating = false
-	StopButton.hide()
-	StartButton.show()
+	pause_calculating()
 
 func _on_start_button_pressed():
-	calculating = true
-	StopButton.show()
-	StartButton.hide()
+	resume_calculating()
+
+# loading files
+
+func load_file(path):
+	var file = FileAccess.open(
+		path,
+		FileAccess.READ)
+	var string = file.get_as_text()
+	var meta_list = string.split("\n")
+	file.close()
+	# get the ifs-s whose meta-data were not damaged
+	ifs_list = []
+	for item in meta_list:
+		ifs_list.append(IFS.from_meta_data(item.replace("https://editor.fracmi.cc/#", "")))
+	# calculate fractals
+	start_calculating()
+
+func _on_upload_button_pressed():
+	LoadDialog.show()
+
+func _on_load_file_dialog_file_selected(path):
+	LoadDialog.hide()
+	load_file(path)
+
+# just meta data
+
+@onready var FileDialogForRandomMeta = $FileDialogForRandomMeta
+
+func _on_meta_button_pressed():
+	stop_calculating()
+	FileDialogForRandomMeta.show()
+
+func _on_file_dialog_for_random_meta_file_selected(path):
+	meta_data = ""
+	for i in Global.sample_size:
+		meta_data += meta_data_to_string(IFS.random_ifs()) + "\n"
+	# save stuff
+	save_meta_data(path)
+	FileDialogForRandomMeta.hide()
