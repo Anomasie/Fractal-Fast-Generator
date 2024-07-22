@@ -15,6 +15,7 @@ var sample_size = 0
 var image_size = 0
 var points = 0
 var prefer_nonempty_pictures = true
+var centered_and_not = false
 ## ifs
 var delay_min = 0
 var delay_max = 0

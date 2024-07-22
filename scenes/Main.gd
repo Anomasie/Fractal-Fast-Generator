@@ -26,21 +26,32 @@ func _ready():
 
 func _process(_delta):
 	if calculating:
-		if ifs_list and sample_counter < len(ifs_list):
+		if ifs_list and sample_counter <= len(ifs_list):
 			# add centered image
-			data += image_to_string(generate_image(ifs_list[sample_counter-1], 1)) + "\n"
-			# add not-centered image
-			data += image_to_string(generate_image(ifs_list[sample_counter-1], 0)) + "\n"
-			# add meta-data (in python-format)
-			meta_data += meta_data_to_string(ifs_list[sample_counter-1]) + "\n"
-			meta_data += meta_data_to_string(ifs_list[sample_counter-1]) + "\n"
+			if Global.centered_and_not:
+				data += image_to_string(generate_image(ifs_list[sample_counter-1], 1)) + "\n"
+				# add not-centered image
+				data += image_to_string(generate_image(ifs_list[sample_counter-1], 0)) + "\n"
+				# add meta-data (in python-format)
+				meta_data += meta_data_to_string(ifs_list[sample_counter-1]) + "\n"
+				meta_data += meta_data_to_string(ifs_list[sample_counter-1]) + "\n"
+			else:
+				data += image_to_string(generate_image(ifs_list[sample_counter-1])) + "\n"
+				# add meta-data (in python-format)
+				meta_data += meta_data_to_string(ifs_list[sample_counter-1]) + "\n"
 			# go on
 			sample_counter += 1
 			Progress.value = float(sample_counter) / len(ifs_list) * 100
 		elif not ifs_list and sample_counter <= Global.sample_size:
 			var ifs = IFS.random_ifs()
-			data += image_to_string(generate_image(ifs)) + "\n"
-			meta_data += meta_data_to_string(ifs) + "\n"
+			if Global.centered_and_not:
+				data += image_to_string(generate_image(ifs, 0)) + "\n"
+				data += image_to_string(generate_image(ifs, 1)) + "\n"
+				meta_data += meta_data_to_string(ifs) + "\n"
+				meta_data += meta_data_to_string(ifs) + "\n"
+			else:
+				data += image_to_string(generate_image(ifs)) + "\n"
+				meta_data += meta_data_to_string(ifs) + "\n"
 			sample_counter += 1
 			Progress.value = float(sample_counter) / Global.sample_size * 100
 		else:
@@ -51,7 +62,6 @@ func start_calculating():
 	data = ""
 	meta_data = ""
 	sample_counter = 1
-	ifs_list = []
 	resume_calculating()
 
 func end_calculating():
@@ -137,7 +147,7 @@ func points_to_image_original(ifs, points):
 				# draw
 				image[len(image)-real_position.y-1][real_position.x] = entry.color
 	# the less points are drawn, the more likely is it to draw 
-	if not ifs_list and Global.prefer_nonempty_pictures and counter < float(Global.points)/2 and randf()*2 > float(counter) / Global.points:
+	if not Global.centered_and_not and not ifs_list and Global.prefer_nonempty_pictures and counter < float(Global.points)/2 and randf()*2 > float(counter) / Global.points:
 		return points_to_image_centered(ifs, points)
 	else:
 		return image
@@ -172,6 +182,26 @@ func image_to_string(image):
 		strings.append(",".join(image[x]))
 	return ",".join(strings)
 
+func ifs_from_meta_data(string):
+	var ifs = IFS.new()
+	var array = string.split(',')
+	array.remove_at(0)
+	ifs.background_color = float(array[0])
+	ifs.delay = int(array[1])
+	array.remove_at(0)
+	array.remove_at(0)
+	for i in len(array)/7:
+		var contr = Contraction.new()
+		contr.translation = Vector2(float(array[i*7]), float(array[i*7+1]))
+		contr.contract = Vector2(float(array[i*7+2]), float(array[i*7+3]))
+		contr.rotation = float(array[i*7+4])
+		contr.mirrored = (array[i*7+5] in ["1", "true"])
+		if contr.mirrored: # if mirrored: change anchor to bottom-left point
+			contr.translation += Vector2(contr.contract.x, 0).rotated(-contr.rotation)
+		contr.color = float(array[i*7+6])
+		ifs.systems.append(contr)
+	return ifs
+
 func meta_data_to_string(ifs):
 	# version
 	var string = "v1"
@@ -190,6 +220,7 @@ func meta_data_to_string(ifs):
 	return string
 
 func _on_button_pressed():
+	ifs_list = []
 	start_calculating()
 
 # saving
@@ -242,7 +273,10 @@ func load_file(path):
 	# get the ifs-s whose meta-data were not damaged
 	ifs_list = []
 	for item in meta_list:
-		ifs_list.append(IFS.from_meta_data(item.replace("https://editor.fracmi.cc/#", "")))
+		if item.begins_with("https://"):
+			ifs_list.append(IFS.from_meta_data(item.replace("https://editor.fracmi.cc/#", "")))
+		elif item.length() > 0:
+			ifs_list.append(ifs_from_meta_data(item))
 	# calculate fractals
 	start_calculating()
 

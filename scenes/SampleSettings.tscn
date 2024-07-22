@@ -67,8 +67,14 @@ layout_mode = 2
 button_pressed = true
 text = "prefer nonempty pictures"
 
+[node name="BothCenteredAndNot" type="CheckBox" parent="."]
+layout_mode = 2
+text = "draw both the centered
+and the [0,1]²-image"
+
 [connection signal="value_changed" from="Boxes/SeedEdit" to="." method="_on_seed_edit_value_changed"]
 [connection signal="value_changed" from="Boxes/AmountEdit" to="." method="_on_amount_edit_value_changed"]
 [connection signal="value_changed" from="Boxes/SizeEdit" to="." method="_on_size_edit_value_changed"]
 [connection signal="value_changed" from="Boxes/PointsEdit" to="." method="_on_points_edit_value_changed"]
 [connection signal="pressed" from="NonemptyPicturesChecker" to="." method="_on_nonempty_pictures_checker_pressed"]
+[connection signal="pressed" from="BothCenteredAndNot" to="." method="_on_both_centered_and_not_pressed"]

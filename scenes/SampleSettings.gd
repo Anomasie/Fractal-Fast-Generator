@@ -5,6 +5,7 @@ extends VBoxContainer
 @onready var SizeEdit = $Boxes/SizeEdit
 @onready var PointsEdit = $Boxes/PointsEdit
 @onready var NonemptyPicChecker = $NonemptyPicturesChecker
+@onready var CenteredAndNot = $BothCenteredAndNot
 
 func _ready():
 	Global.random_seed = SeedEdit.value
@@ -12,6 +13,7 @@ func _ready():
 	Global.image_size = SizeEdit.value
 	Global.points = PointsEdit.value
 	Global.prefer_nonempty_pictures = NonemptyPicChecker.button_pressed
+	Global.centered_and_not = CenteredAndNot.button_pressed
 
 func _on_seed_edit_value_changed(value):
 	Global.random_seed = value
@@ -27,3 +29,6 @@ func _on_points_edit_value_changed(value):
 
 func _on_nonempty_pictures_checker_pressed():
 	Global.prefer_nonempty_pictures = NonemptyPicChecker.button_pressed
+
+func _on_both_centered_and_not_pressed():
+	Global.centered_and_not = CenteredAndNot.button_pressed
