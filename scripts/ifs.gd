@@ -8,9 +8,9 @@ var delay = Global.DEFAULT_DELAY
 
 static func random_ifs():
 	var ifs = IFS.new()
-	var nb_systems = Random.randi(Global.nb_contractions_min, Global.nb_contractions_max)
+	var nb_systems = Random.randi(Global.nb_contractions_min, Global.nb_contractions_max+1)
 	if nb_systems > 1:
-		ifs.delay = Random.randi(Global.delay_min, Global.delay_max)
+		ifs.delay = Random.randi(Global.delay_min, Global.delay_max+1)
 	else:
 		ifs.delay = 0
 	if Global.bgcolor_allowed:
