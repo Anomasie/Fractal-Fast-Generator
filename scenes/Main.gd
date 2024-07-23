@@ -185,20 +185,15 @@ func image_to_string(image):
 func ifs_from_meta_data(string):
 	var ifs = IFS.new()
 	var array = string.split(',')
-	array.remove_at(0)
-	ifs.background_color = float(array[0])
-	ifs.delay = int(array[1])
-	array.remove_at(0)
-	array.remove_at(0)
-	for i in len(array)/7:
+	ifs.background_color = float(array[1])
+	ifs.delay = int(array[2])
+	for i in ((len(array)-3) / 7):
 		var contr = Contraction.new()
-		contr.translation = Vector2(float(array[i*7]), float(array[i*7+1]))
-		contr.contract = Vector2(float(array[i*7+2]), float(array[i*7+3]))
-		contr.rotation = float(array[i*7+4])
-		contr.mirrored = (array[i*7+5] in ["1", "true"])
-		if contr.mirrored: # if mirrored: change anchor to bottom-left point
-			contr.translation += Vector2(contr.contract.x, 0).rotated(-contr.rotation)
-		contr.color = float(array[i*7+6])
+		contr.translation = Vector2(float(array[3 + i * 7 + 0]), float(array[3 + i * 7 + 1]))
+		contr.contract = Vector2(float(array[3 + i * 7 + 2]), float(array[3 + i * 7 + 3]))
+		contr.rotation = float(array[3 + i * 7 + 4])
+		contr.mirrored = (array[3 + i * 7 + 5] in ["1", "true"])
+		contr.color = float(array[3 + i * 7 + 6])
 		ifs.systems.append(contr)
 	return ifs
 
@@ -230,7 +225,8 @@ func save():
 
 func save_local(path):
 	save_images(path)
-	save_meta_data(path)
+	if not ifs_list:
+		save_meta_data(path)
 
 func save_images(path):
 	if not path.ends_with(".csv"):
@@ -241,14 +237,22 @@ func save_images(path):
 	file.store_string(data)
 	file.close()
 
-func save_meta_data(path):
+func save_meta_data(path, overwrite_name = true):
 	if path.ends_with(".csv"):
 		path = path.left(path.length()-4)
-	if path.ends_with("_meta"):
-		path = path.left(path.length()-5)
-	var file = FileAccess.open(
-		path+"_meta.csv",
-		FileAccess.WRITE)
+	var file
+	if overwrite_name:
+		if path.ends_with("_meta"):
+			path = path.left(path.length()-5)
+		file = FileAccess.open(
+			path+"_meta.csv",
+			FileAccess.WRITE)
+	else:
+		if not path.ends_with('.csv'):
+			path += ".csv"
+		file = FileAccess.open(
+			path,
+			FileAccess.WRITE)
 	file.store_string(meta_data)
 	file.close()
 
@@ -300,5 +304,5 @@ func _on_file_dialog_for_random_meta_file_selected(path):
 	for i in Global.sample_size:
 		meta_data += meta_data_to_string(IFS.random_ifs()) + "\n"
 	# save stuff
-	save_meta_data(path)
+	save_meta_data(path, false)
 	FileDialogForRandomMeta.hide()
